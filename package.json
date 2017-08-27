@@ -1,0 +1,9 @@
+{
+  "name": "express-promise-handler",
+  "version": "1.0.0",
+  "description": "allows express middlewares to return promise",
+  "main": "index.js",
+  "repository": "git@github.com:vibhavsinha/express-promise-handler.git",
+  "author": "vibhav sinha",
+  "license": "GPL-v3"
+}
