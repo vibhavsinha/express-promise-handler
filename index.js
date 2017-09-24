@@ -30,7 +30,7 @@ exports.HTTPError = class HTTPError extends Error {
  * @return {function(req:object, res:object):void}
  */
 exports.default = (promiseFunction) => {
-  return (req, res) => {
+  return (req, res, next) => {
     new Promise((resolve, reject) => {
       resolve(promiseFunction(req));
     })
@@ -43,10 +43,14 @@ exports.default = (promiseFunction) => {
         console.log(`Error caught ${rnd}: `, e);
         res.status(500);
         return {
-          message: `Internal server error. Mention this error to our support: ${rnd}`,
+          message: `Internal server error: ${rnd}`,
         };
       })
       .then((data) => {
+        if (typeof data === 'undefined') {
+          next();
+          return;
+        }
         if (typeof data === 'object') {
           return res.json(data);
         }
