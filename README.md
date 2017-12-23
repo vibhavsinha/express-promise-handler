@@ -73,13 +73,13 @@ exports.default = ContentController;
 
 ```json
 {
-  message: 'entry not found'
+  "message": "entry not found"
 }
 ```
 
 ```json
 {
-  message: 'Internal server error: cbnvdtbz51v9pc8h395qd'
+  "message": "Internal server error: cbnvdtbz51v9pc8h395qd"
 }
 ```
 
@@ -95,6 +95,10 @@ response.
 
 
 ## Changelog
+
+## [2.1.0] - 2017-12-23
+### Changed
+- added feature to handle buffer data as raw
 
 ## [2.0.0] - 2017-09-24
 ### Changed
