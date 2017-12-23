@@ -51,6 +51,9 @@ exports.default = (promiseFunction) => {
           next();
           return;
         }
+        if (typeof data === 'object' && data.constructor.name === 'Buffer') {
+          return res.send(data);
+        }
         if (typeof data === 'object') {
           return res.json(data);
         }
