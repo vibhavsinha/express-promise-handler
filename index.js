@@ -1,6 +1,15 @@
 const randomString = () => Math.random().toString(36).substring(2, 15) +
   Math.random().toString(36).substring(2, 15);
 
+let errorListeners = [];
+
+exports.subscribeError = (cb) => {
+  errorListeners.push(cb);
+  return () => {
+    errorListeners = errorListeners.filter((l) => l !== cb);
+  }
+};
+
 /**
  * An errror class which handles HTTP status codes.
  */
@@ -10,14 +19,14 @@ exports.HTTPError = class HTTPError extends Error {
    * status code along with error message. Check the default function for more
    * details
    *
-   * @param {integer} code
-   * @param {any} obj
+   * @param {number} code
+   * @param {*} obj
    */
   constructor(code, obj) {
     super(obj);
     this.code = code;
     this.message = (typeof obj === 'object') ? obj : {
-      message: obj.toString(),
+      message: JSON.stringify(obj),
     };
   }
 };
@@ -26,18 +35,23 @@ exports.HTTPError = class HTTPError extends Error {
  * convert a promise based function into an express middleware.
  * the returned function is not exactly a middleware because it does not hanlle
  * any next function.
- * @param {function(req:object):any} promiseFunction
+ * @param {function(req:object):*} promiseFunction
  * @return {function(req:object, res:object):void}
  */
 exports.default = (promiseFunction) => {
   return (req, res, next) => {
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       resolve(promiseFunction(req));
     })
       .catch((e) => {
-        if (e.constructor.name === 'HTTPError') {
+        try {
+          errorListeners.forEach((l) => l(e));
+        } catch (listenerError) {
+          console.error('Error calling error listener: ', listenerError);
+        }
+        if (e && e.constructor && e.constructor.name === 'HTTPError') {
           res.status(e.code);
-          return e.message;
+          return (e && e.message) ? e.message : e;
         }
         let rnd = randomString();
         console.log(`Error caught ${rnd}: `, e);
@@ -51,7 +65,7 @@ exports.default = (promiseFunction) => {
           next();
           return;
         }
-        if (typeof data === 'object' && data.constructor.name === 'Buffer') {
+        if (typeof data === 'object' && data && data.constructor.name === 'Buffer') {
           return res.send(data);
         }
         if (typeof data === 'object') {
