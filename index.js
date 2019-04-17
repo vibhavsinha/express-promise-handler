@@ -25,9 +25,14 @@ exports.HTTPError = class HTTPError extends Error {
   constructor(code, obj) {
     super(obj);
     this.code = code;
-    this.message = (typeof obj === 'object') ? obj : {
-      message: JSON.stringify(obj),
-    };
+    this.obj = obj;
+    if (typeof obj === 'string') {
+      this.message = obj;
+    } else if (obj && obj.message && Object.keys(obj).length === 1 && typeof obj.message === 'string') {
+      this.message = obj.message;
+    } else {
+      this.message = JSON.stringify(obj);
+    }
   }
 };
 
@@ -51,7 +56,7 @@ exports.default = (promiseFunction) => {
         }
         if (e && e.constructor && e.constructor.name === 'HTTPError') {
           res.status(e.code);
-          return (e && e.message) ? e.message : e;
+          return (e && e.obj) ? e.obj: e;
         }
         let rnd = randomString();
         console.log(`Error caught ${rnd}: `, e);
@@ -75,3 +80,4 @@ exports.default = (promiseFunction) => {
       });
   };
 };
+
