@@ -96,6 +96,10 @@ response.
 
 ## Changelog
 
+## [3.0.0] - 2020-04-09
+### Changed
+- send assertion error as http status 400 with the given message
+
 ## [2.1.0] - 2017-12-23
 ### Changed
 - added feature to handle buffer data as raw
