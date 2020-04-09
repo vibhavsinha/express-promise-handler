@@ -58,6 +58,10 @@ exports.default = (promiseFunction) => {
           res.status(e.code);
           return (e && e.obj) ? e.obj: e;
         }
+        if (e && e.constructor && ['AssertionError'].includes(e.constructor.name)) {
+          res.status(400);
+          return {message: e.message};
+        }
         let rnd = randomString();
         console.log(`Error caught ${rnd}: `, e);
         res.status(500);
