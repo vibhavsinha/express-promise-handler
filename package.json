@@ -1,7 +1,7 @@
 {
   "name": "express-promise-handler",
-  "version": "2.2.2",
-  "description": "allows express middlewares to return promise",
+  "version": "3.0.0",
+  "description": "allows express middle-wares to return promise",
   "main": "index.js",
   "repository": "git@github.com:vibhavsinha/express-promise-handler.git",
   "author": "vibhav sinha",
