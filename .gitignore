@@ -63,3 +63,5 @@ typings/
 # vim temp files
 *.swp
 *.swo
+
+dist/

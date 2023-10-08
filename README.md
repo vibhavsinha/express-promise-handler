@@ -1,25 +1,12 @@
 # express-promise-handler
 allows express middlewares to return promise by wrapping the middlewares
 
-[![Commitizen
-friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-
-
 ## Objective
 
 Make the express route controllers easy to test and easy to read
 
 ## Concepts
 
-**Exported object**
-```
-module.exports = {
-  default: (function(req:object):any) => {
-    return function(req:object, res:object)
-  },
-  HTTPError: class HTTPError extends Error
-}
-```
 
 * return from the callback is sent as response
 * object based responses are returned as json
@@ -87,7 +74,7 @@ exports.default = ContentController;
 
 Thrown errors which are not instances of HTTPError are logged with full stack
 traces. These stack traces are assigned a unique alphanumeric string which is
-also sent as part of the response. API clients can chose to display this string
+also sent as part of the response. API clients can choose to display this string
 to the users in order to track individual issues.
 
 This also ensures that uncaught errors will not have any details conveyed in the
@@ -95,6 +82,12 @@ response.
 
 
 ## Changelog
+
+## [3.1.0] - 2023-10-09
+### Changed
+- added typescript support
+- Response will be set as second argument to use for setting headers
+- added package-lock and removed yarn.lock
 
 ## [3.0.0] - 2020-04-09
 ### Changed

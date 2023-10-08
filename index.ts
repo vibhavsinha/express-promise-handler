@@ -1,9 +1,11 @@
+import {NextFunction, Request, Response} from 'express';
+
 const randomString = () => Math.random().toString(36).substring(2, 15) +
   Math.random().toString(36).substring(2, 15);
 
-let errorListeners = [];
+let errorListeners: Function[] = [];
 
-exports.subscribeError = (cb) => {
+export const subscribeError = (cb: Function) => {
   errorListeners.push(cb);
   return () => {
     errorListeners = errorListeners.filter((l) => l !== cb);
@@ -11,42 +13,44 @@ exports.subscribeError = (cb) => {
 };
 
 /**
- * An errror class which handles HTTP status codes.
+ * An error class which handles HTTP status codes.
  */
-exports.HTTPError = class HTTPError extends Error {
+export const HTTPError = class HTTPError extends Error {
   /**
    * return an instance of HTTPError which can be handled to provide correct
    * status code along with error message. Check the default function for more
    * details
    *
    * @param {number} code
-   * @param {*} obj
    */
-  constructor(code, obj) {
-    super(obj);
-    this.code = code;
-    this.obj = obj;
+  readonly code: number;
+  readonly message: string;
+  readonly obj: string | {message: string}
+  constructor(code: number, obj: string | {message: string}) {
+    let message;
     if (typeof obj === 'string') {
-      this.message = obj;
+      message = obj;
     } else if (obj && obj.message && Object.keys(obj).length === 1 && typeof obj.message === 'string') {
-      this.message = obj.message;
+      message = obj.message;
     } else {
-      this.message = JSON.stringify(obj);
+      message = JSON.stringify(obj);
     }
+    super(message);
+    this.code = code;
+    this.obj = {message};
+    this.message = message;
   }
 };
 
 /**
  * convert a promise based function into an express middleware.
- * the returned function is not exactly a middleware because it does not hanlle
+ * the returned function is not exactly a middleware because it does not handle
  * any next function.
- * @param {function(req:object):*} promiseFunction
- * @return {function(req:object, res:object):void}
  */
-exports.default = (promiseFunction) => {
-  return (req, res, next) => {
+export default <T extends Request>(promiseFunction: (req: T, res: Response) => Promise<unknown> | unknown ) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     new Promise((resolve) => {
-      resolve(promiseFunction(req));
+      resolve(promiseFunction(req as T, res));
     })
       .catch((e) => {
         try {
@@ -84,4 +88,3 @@ exports.default = (promiseFunction) => {
       });
   };
 };
-
