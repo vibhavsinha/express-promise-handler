@@ -5,7 +5,7 @@ const randomString = () => Math.random().toString(36).substring(2, 15) +
 
 let errorListeners: Function[] = [];
 
-export const subscribeError = (cb: Function) => {
+export const subscribeError = (cb: (e: HTTPError | Error) => void) => {
   errorListeners.push(cb);
   return () => {
     errorListeners = errorListeners.filter((l) => l !== cb);
@@ -15,7 +15,7 @@ export const subscribeError = (cb: Function) => {
 /**
  * An error class which handles HTTP status codes.
  */
-export const HTTPError = class HTTPError extends Error {
+export class HTTPError extends Error {
   /**
    * return an instance of HTTPError which can be handled to provide correct
    * status code along with error message. Check the default function for more
