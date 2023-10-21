@@ -83,6 +83,10 @@ response.
 
 ## Changelog
 
+## [3.2.0] - 2023-10-21
+### Changed
+- Added typescript definitions for subscribeError callback
+
 ## [3.1.0] - 2023-10-09
 ### Changed
 - added typescript support
