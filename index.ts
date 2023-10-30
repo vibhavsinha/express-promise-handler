@@ -28,16 +28,20 @@ export class HTTPError extends Error {
   readonly obj: string | {message: string}
   constructor(code: number, obj: string | {message: string}) {
     let message;
+    let errorObj;
     if (typeof obj === 'string') {
       message = obj;
-    } else if (obj && obj.message && Object.keys(obj).length === 1 && typeof obj.message === 'string') {
+      errorObj = {message};
+    } else if (obj && typeof obj.message === 'string') {
       message = obj.message;
+      errorObj = obj;
     } else {
       message = JSON.stringify(obj);
+      errorObj = {...obj, message}
     }
     super(message);
     this.code = code;
-    this.obj = {message};
+    this.obj = errorObj;
     this.message = message;
   }
 };
