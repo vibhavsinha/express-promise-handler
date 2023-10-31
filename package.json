@@ -7,7 +7,7 @@
   "repository": "git@github.com:vibhavsinha/express-promise-handler.git",
   "author": "vibhav sinha",
   "scripts": {
-    "build": "tsc"
+    "build": "rm -rf dist && tsc"
   },
   "files": [
     "dist"
