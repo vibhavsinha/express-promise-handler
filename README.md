@@ -83,6 +83,10 @@ response.
 
 ## Changelog
 
+## [3.3.0] 2023-10-31
+### Changed
+- Added support for complex error object with more properties
+
 ## [3.2.0] - 2023-10-21
 ### Changed
 - Added typescript definitions for subscribeError callback
