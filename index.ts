@@ -62,7 +62,7 @@ export default <T extends Request>(promiseFunction: (req: T, res: Response) => P
         } catch (listenerError) {
           console.error('Error calling error listener: ', listenerError);
         }
-        if (e && e.constructor && e.constructor.name === 'HTTPError') {
+        if (e instanceof HTTPError) {
           res.status(e.code);
           return (e && e.obj) ? e.obj: e;
         }
