@@ -4,7 +4,10 @@
   "description": "allows express middle-wares to return promise",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "repository": "git@github.com:vibhavsinha/express-promise-handler.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/vibhavsinha/express-promise-handler.git"
+  },
   "author": "vibhav sinha",
   "scripts": {
     "build": "rm -rf dist && tsc"
