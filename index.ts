@@ -44,7 +44,7 @@ export class HTTPError extends Error {
     this.obj = errorObj;
     this.message = message;
   }
-};
+}
 
 /**
  * convert a promise based function into an express middleware.
