@@ -85,6 +85,10 @@ response.
 
 ## Changelog
 
+## 3.4.0 2025-08-04
+
+- Added request object as second argument of subscribeError
+
 ## 3.3.1 2023-12-23
 
 - Fix the type check for `HTTPError` using `instanceof` instead of constructor
