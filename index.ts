@@ -58,7 +58,7 @@ export default <T extends Request>(promiseFunction: (req: T, res: Response) => P
     })
       .catch((e) => {
         try {
-          errorListeners.forEach((l) => l(e));
+          errorListeners.forEach((l) => l(e, req));
         } catch (listenerError) {
           console.error('Error calling error listener: ', listenerError);
         }
