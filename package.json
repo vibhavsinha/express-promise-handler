@@ -1,6 +1,6 @@
 {
   "name": "express-promise-handler",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "allows express middle-wares to return promise",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
