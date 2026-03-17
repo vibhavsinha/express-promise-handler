@@ -85,7 +85,7 @@ response.
 
 ## Changelog
 
-## 3.4.3 2026-03-17
+## 3.4.4 2026-03-17
 
 - Improve types of arg of `HTTPError` and `subscribeError`
 

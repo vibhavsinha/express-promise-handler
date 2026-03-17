@@ -13,12 +13,10 @@ export const subscribeError = (cb: ErrorCallback) => {
   }
 };
 
-type ErrorObj = string | {message: string; [key: string]: unknown};
-
 /**
  * An error class which handles HTTP status codes.
  */
-export class HTTPError extends Error {
+export class HTTPError<T extends {message: string} = {message: string}> extends Error {
   /**
    * return an instance of HTTPError which can be handled to provide correct
    * status code along with error message. Check the default function for more
@@ -28,13 +26,13 @@ export class HTTPError extends Error {
    */
   readonly code: number;
   readonly message: string;
-  readonly obj: ErrorObj;
-  constructor(code: number, obj: ErrorObj) {
-    let message;
-    let errorObj;
+  readonly obj: T | {message: string};
+  constructor(code: number, obj: T | string) {
+    let message: string;
+    let errorObj: T | {message: string};
     if (typeof obj === 'string') {
       message = obj;
-      errorObj = {message};
+      errorObj = {message: obj};
     } else if (obj && typeof obj.message === 'string') {
       message = obj.message;
       errorObj = obj;
