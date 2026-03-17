@@ -3,14 +3,17 @@ import {NextFunction, Request, Response} from 'express';
 const randomString = () => Math.random().toString(36).substring(2, 15) +
   Math.random().toString(36).substring(2, 15);
 
-let errorListeners: Function[] = [];
+type ErrorCallback = (e: Error, req?: Request) => void
+let errorListeners: ErrorCallback[] = [];
 
-export const subscribeError = (cb: (e: HTTPError | Error) => void) => {
+export const subscribeError = (cb: ErrorCallback) => {
   errorListeners.push(cb);
   return () => {
     errorListeners = errorListeners.filter((l) => l !== cb);
   }
 };
+
+type ErrorObj = string | {message: string; [key: string]: unknown};
 
 /**
  * An error class which handles HTTP status codes.
@@ -25,8 +28,8 @@ export class HTTPError extends Error {
    */
   readonly code: number;
   readonly message: string;
-  readonly obj: string | {message: string}
-  constructor(code: number, obj: string | {message: string}) {
+  readonly obj: ErrorObj;
+  constructor(code: number, obj: ErrorObj) {
     let message;
     let errorObj;
     if (typeof obj === 'string') {
