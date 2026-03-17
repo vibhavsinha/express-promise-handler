@@ -85,6 +85,10 @@ response.
 
 ## Changelog
 
+## 3.4.1 2026-03-17
+
+- Improve types of arg of `HTTPError` and `subscribeError`
+
 ## 3.4.0 2025-08-04
 
 - Added request object as second argument of subscribeError
