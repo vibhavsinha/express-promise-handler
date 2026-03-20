@@ -16,47 +16,29 @@ Make the express route controllers easy to test and easy to read
 - thrown errors are caught and handled with 500
 - custom error can be thrown using `HTTPError`
 - returning `undefined` will call the `next` method. If there is no next, this
-  can result in `504` timeout.
+  can result in `504` timeout. This is to build middlewares.
 
 ## Example
 
-### Setting up routes
+### Setting up
 
 ```javascript
-let ContentController = require('./content.controller');
-let Router = require('express').Router;
-let controller = new ContentController();
-let router = new Router();
+import express from 'express';
+import eph, {HTTPError, errorHandler} from 'express-promise-handler';
+import assert from 'node:assert/strict';
 
-let promiseHandler = require('express-promise-handler').default;
+const app = express();
 
-router.get('/:id', promiseHandler(controller.info));
+app.get('/', eph(async (req) => {
+  if (req.query.known) throw new HTTPError(404, {message: 'entry not found'});
+  if (req.query.unknown) throw new Error('abcd');
+  if (req.query.assert) assert.fail('assertion failure');
+  return {a: 1};
+}));
 
-module.exports = router;
-```
+app.use(errorHandler);
 
-### In the controller
-
-```javascript
-const HTTPError = require('express-promise-handler').HTTPError;
-
-class ContentController {
-  info(req) {
-    return models.content.findOne({
-      where: {
-        id: req.params.id
-      }
-    })
-    .then((entry) => {
-      if (!entry) {
-        throw new HTTPError(404, 'entry not found');
-      }
-      return entry;
-    });
-  }
-}
-
-exports.default = ContentController;
+app.listen(5151, () => console.log('listening'));
 ```
 
 **Sample response**
@@ -85,15 +67,22 @@ response.
 
 ## Changelog
 
-## 3.4.4 2026-03-17
+## [4.0.0] 2026-03-20
+
+- Removed `subscribeError` because it is better used through express default handler
+- Dropped support for string as the second argument to `HTTPError`. Only objects supported.
+- Error handling separated to a new express middleware. This is required to be used for using `HTTPError`.
+- Export type changed to ESM. Node 22+ recommended to work with `cjs` imports.
+
+## [3.4.4] 2026-03-17
 
 - Improve types of arg of `HTTPError` and `subscribeError`
 
-## 3.4.0 2025-08-04
+## [3.4.0] 2025-08-04
 
 - Added request object as second argument of subscribeError
 
-## 3.3.1 2023-12-23
+## [3.3.1] 2023-12-23
 
 - Fix the type check for `HTTPError` using `instanceof` instead of constructor
 name. It was causing issues when used with `got` where the error is also named `HTTPError`.

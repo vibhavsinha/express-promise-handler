@@ -1,9 +1,10 @@
 {
   "name": "express-promise-handler",
-  "version": "3.4.4",
+  "version": "4.0.0",
   "description": "allows express middle-wares to return promise",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/vibhavsinha/express-promise-handler.git"
@@ -17,11 +18,13 @@
   ],
   "license": "GPL-v3",
   "devDependencies": {
+    "@tsconfig/node24": "^24.0.4",
     "@types/express": "^4.17.25",
     "@types/node": "^24.12.0",
+    "express": "^5.2.1",
     "typescript": "^5.9.3"
   },
-  "dependencies": {
-    "@tsconfig/node22": "^22.0.2"
+  "peerDependencies": {
+    "express": "^4 || ^5"
   }
 }
